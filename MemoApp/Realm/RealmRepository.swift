@@ -14,10 +14,4 @@ protocol MemoRepositoryType {
 
 let localRealm = try! Realm()
 
-class RealmRepository {
 
-    func fetchDate(date : Date)-> Results<memoModel> {
-        return localRealm.objects(memoModel.self).filter(<#T##predicateFormat: String##String#>, <#T##args: Any...##Any#>)
-    }
-
-}

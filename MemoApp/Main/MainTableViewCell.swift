@@ -15,6 +15,7 @@ class MainTableViewCell: UITableViewCell {
         
         configure()
         constraints()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -29,6 +30,7 @@ class MainTableViewCell: UITableViewCell {
        let view = UILabel()
         view.textColor = .white
         view.font = .systemFont(ofSize: 20, weight: .bold)
+    
         return view
         
     }()

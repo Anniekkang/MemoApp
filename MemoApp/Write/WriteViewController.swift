@@ -32,7 +32,7 @@ class WriteViewController: BaseViewController {
 
         mainView.textview.becomeFirstResponder()
         
-        
+        print("Realm is located at:", localRealm.configuration.fileURL!)
         
     }
     
@@ -76,20 +76,38 @@ class WriteViewController: BaseViewController {
             self.navigationController?.popViewController(animated: true)
            } else {
             //save text(realm)
+               let contents = mainView.textview.text
+               let task = memoModel(title: "mola", contents: contents)
+               do {
+                   try localRealm.write{
+                              localRealm.add(task)
+                              print("realm succeed")
+                       }
+                   } catch {
+                       print(Error.self)
+                   }
             
-               if 
-            
-            
+               //나타내기
+        
+               
+               
+               MainViewController().mainView.tableView.reloadData()
+               dismiss(animated: true)
+               
+               
+               
+               
         }
+  
+        
     }
     
     
 
     @objc func backButtonTapped(){
-        self.navigationController?.popViewController(animated: true)
-        
-        
-        
+
+        let vc = MainViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
         
        }
      

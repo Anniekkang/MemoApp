@@ -22,37 +22,37 @@ class MainView: BaseView {
     }
     
     
-    let searchBar : UISearchBar = {
-        let view = UISearchBar()
-        view.placeholder = "검색"
-        view.barTintColor = .darkGray
-        view.searchTextField.backgroundColor = .systemGray
-        return view
-    }()
+//    let searchBar : UISearchBar = {
+//        let view = UISearchBar()
+//        view.placeholder = "검색"
+//        view.barTintColor = .darkGray
+//        view.searchTextField.backgroundColor = .systemGray
+//        return view
+//    }()
     
     let tableView : UITableView = {
-        let view = UITableView()
-        
+        let view = UITableView(frame: .zero, style: .insetGrouped)
+        view.layer.cornerRadius = 8
         
         return view
         
     }()
     
     override func configuration() {
-        [searchBar,tableView].forEach {
+        [tableView].forEach {
             self.addSubview($0)
         }
     }
     
     override func setConstraints() {
-        searchBar.snp.makeConstraints { make in
-            make.trailingMargin.topMargin.equalTo(10)
-            make.leadingMargin.equalTo(-10)
-            
-        }
+//        searchBar.snp.makeConstraints { make in
+//            make.trailingMargin.topMargin.equalTo(10)
+//            make.leadingMargin.equalTo(-10)
+//
+//        }
         tableView.snp.makeConstraints { make in
-            make.trailingMargin.leadingMargin.bottomMargin.equalTo(safeAreaLayoutGuide)
-            make.topMargin.equalTo(searchBar.snp.bottomMargin).offset(20)
+            make.leadingMargin.trailingMargin.bottomMargin.equalTo(safeAreaLayoutGuide)
+            make.topMargin.equalTo(20)
             
         }
         
