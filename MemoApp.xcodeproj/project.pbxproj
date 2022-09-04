@@ -27,7 +27,8 @@
 		9E3A6DB728C48EA600ED02E9 /* realmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A6DB628C48EA600ED02E9 /* realmModel.swift */; };
 		9E3A6DBA28C4901F00ED02E9 /* WriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A6DB928C4901F00ED02E9 /* WriteViewController.swift */; };
 		9E3A6DBC28C4902C00ED02E9 /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A6DBB28C4902C00ED02E9 /* WriteView.swift */; };
-		9E3A6DBE28C4B0AA00ED02E9 /* RealmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A6DBD28C4B0AA00ED02E9 /* RealmRepository.swift */; };
+		9E535C3B28C5307F0074E9C4 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E535C3A28C5307F0074E9C4 /* SearchTableViewController.swift */; };
+		9E535C3D28C5308E0074E9C4 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E535C3C28C5308E0074E9C4 /* SearchTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,7 +49,8 @@
 		9E3A6DB628C48EA600ED02E9 /* realmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = realmModel.swift; sourceTree = "<group>"; };
 		9E3A6DB928C4901F00ED02E9 /* WriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewController.swift; sourceTree = "<group>"; };
 		9E3A6DBB28C4902C00ED02E9 /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
-		9E3A6DBD28C4B0AA00ED02E9 /* RealmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmRepository.swift; sourceTree = "<group>"; };
+		9E535C3A28C5307F0074E9C4 /* SearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		9E535C3C28C5308E0074E9C4 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 		9E19D69428C16B3F00DD949C /* MemoApp */ = {
 			isa = PBXGroup;
 			children = (
+				9E535C3928C530670074E9C4 /* Search */,
 				9E3A6DBF28C4B1AB00ED02E9 /* Realm */,
 				9E3A6DB828C48FC800ED02E9 /* Write */,
 				9E19D6AE28C16BC900DD949C /* Base */,
@@ -133,10 +136,18 @@
 		9E3A6DBF28C4B1AB00ED02E9 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
-				9E3A6DBD28C4B0AA00ED02E9 /* RealmRepository.swift */,
 				9E3A6DB628C48EA600ED02E9 /* realmModel.swift */,
 			);
 			path = Realm;
+			sourceTree = "<group>";
+		};
+		9E535C3928C530670074E9C4 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				9E535C3A28C5307F0074E9C4 /* SearchTableViewController.swift */,
+				9E535C3C28C5308E0074E9C4 /* SearchTableViewCell.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,12 +237,13 @@
 				9E19D69A28C16B3F00DD949C /* ViewController.swift in Sources */,
 				9E3A6DBA28C4901F00ED02E9 /* WriteViewController.swift in Sources */,
 				9E19D69628C16B3F00DD949C /* AppDelegate.swift in Sources */,
+				9E535C3B28C5307F0074E9C4 /* SearchTableViewController.swift in Sources */,
 				9E19D6C428C2062200DD949C /* MainTableViewCell.swift in Sources */,
 				9E3A6DB728C48EA600ED02E9 /* realmModel.swift in Sources */,
 				9E19D69828C16B3F00DD949C /* SceneDelegate.swift in Sources */,
 				9E19D6B028C16BD100DD949C /* BaseView.swift in Sources */,
 				9E19D6AD28C16BC600DD949C /* MainView.swift in Sources */,
-				9E3A6DBE28C4B0AA00ED02E9 /* RealmRepository.swift in Sources */,
+				9E535C3D28C5308E0074E9C4 /* SearchTableViewCell.swift in Sources */,
 				9E3A6DBC28C4902C00ED02E9 /* WriteView.swift in Sources */,
 				9E19D6B228C16BDB00DD949C /* BaseViewController.swift in Sources */,
 				9E19D6AA28C16B6D00DD949C /* MainViewController.swift in Sources */,

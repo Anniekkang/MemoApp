@@ -10,7 +10,7 @@ import RealmSwift
 
 class WriteViewController: BaseViewController {
 
-    
+    let localRealm = try! Realm()
    
     var tasks : Results<memoModel>! {
         didSet {

@@ -17,6 +17,9 @@ class MainViewController: BaseViewController {
     var fixedMemoCount = 0
     let mainView = MainView()
    
+  
+   
+    let localRealm = try! Realm()
     
     override func loadView() {
         self.view = mainView
@@ -33,12 +36,17 @@ class MainViewController: BaseViewController {
         configuration()
         toolbarDesign()
         setupSearchController()
-       
+        
+
     
 
     }
     
     func setupSearchController(){
+        
+        let numberFormatter = NumberFormatter()
+        NumberFormatter().numberStyle = .decimal
+        let newCount = numberFormatter.string(for: tasks.count)
         
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "검색"
@@ -49,27 +57,31 @@ class MainViewController: BaseViewController {
         
         }
         
-        searchController.searchResultsUpdater = self
+      
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
         searchController.searchBar.tintColor = UIColor.orange
         
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.title = tasks.count == 0 ? "0개의 메모" : "\(tasks.count)개의 메모"
+        self.navigationItem.title = "\(newCount!)개의 메모"
         
         self.navigationItem.hidesSearchBarWhenScrolling = false
-        self.navigationController?.navㅇgationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.tintColor = UIColor.clear
       
         
+        searchController.searchBar.searchTextField.addTarget(self, action: #selector(textFieldTapped), for: .touchUpInside)
         
        
         
         
     }
     
-    
+    @objc func textFieldTapped(){
+        let vc = SearchTableViewController()
+        self.navigationController?.present(vc, animated: true)
+    }
    
     
     
@@ -173,7 +185,47 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
 
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let fixed = UIContextualAction(style: .normal, title: "fixed") { action, view, completionHandler in
+            
+            try! self.localRealm.write{
+                
+                self.tasks[indexPath.row].fixed = !self.tasks[indexPath.row].fixed
+                self.fetchRealm()
+               
+            }
+
+        }
+
+        fixed.image = UIImage(systemName: "pin.fill" )
+        fixed.backgroundColor = .orange
+        fixed.image?.withTintColor(.white)
+        
+        
+        
+        return UISwipeActionsConfiguration(actions: [fixed])
+        
+    }
     
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let delete = UIContextualAction(style: .destructive, title: "delete") { action, view, completionHandler in
+            
+            try! self.localRealm.write({
+                self.localRealm.delete(self.tasks[indexPath.row])
+                
+                
+                
+                
+            })
+    
+    }
+        
+        return UISwipeActionsConfiguration(actions: [delete] )
+        
+    }
+        
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
@@ -198,31 +250,35 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         return 70
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            
-            if let tasksFordeletion = tasks?[indexPath.row] {
-                try! localRealm.write({
-                    localRealm.delete(tasksFordeletion)
-                })
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-        }
-    }
- }
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//
+//            if let tasksFordeletion = tasks?[indexPath.row] {
+//                try! localRealm.write({
+//                    localRealm.delete(tasksFordeletion)
+//                })
+//                tableView.deleteRows(at: [indexPath], with: .automatic)
+//        }
+//    }
+// }
   
   
 }
 
-extension MainViewController : UISearchResultsUpdating {
-    func updateSearchResults(for searchController : UISearchController) {
-        //서치바에서 검색을 할때마다 실행됨
-        guard let text = searchController.searchBar.text else { return }
-        print(text)
-        
-       
-        
-        
-        
-        
-    }
-}
+//extension UIColor {
+//    static var navigationBarColor : UIColor {
+//        if #available(iOS 13, *) {
+//            return UIColor { (traitCollection : UITraitCollection) -> UIColor in
+//                if traitCollection.userInterfaceStyle == .dark {
+//                    return UIColor(red: 18.0/255.0, green: 18.0/255.0, blue: 18.0/255.0, alpha: 1.0)
+//                } else {
+//                    return UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 1.0)
+//                }
+//            }
+//
+//            }
+//        else {
+//            return UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 240.0/255.0)
+//        }
+//    }
+//}

@@ -15,6 +15,8 @@ class MainView: BaseView {
         
         configuration()
         setConstraints()
+        
+        
     }
     
     required init?(coder: NSCoder) {
