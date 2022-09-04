@@ -12,6 +12,9 @@ class MainView: BaseView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        configuration()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -22,12 +25,15 @@ class MainView: BaseView {
     let searchBar : UISearchBar = {
         let view = UISearchBar()
         view.placeholder = "검색"
-        view.backgroundColor = .systemGray2
+        view.barTintColor = .darkGray
+        view.searchTextField.backgroundColor = .systemGray
         return view
     }()
     
     let tableView : UITableView = {
         let view = UITableView()
+        
+        
         return view
         
     }()
@@ -40,12 +46,13 @@ class MainView: BaseView {
     
     override func setConstraints() {
         searchBar.snp.makeConstraints { make in
-            make.trailingMargin.leadingMargin.topMargin.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(self).multipliedBy(0.2)
+            make.trailingMargin.topMargin.equalTo(10)
+            make.leadingMargin.equalTo(-10)
+            
         }
         tableView.snp.makeConstraints { make in
             make.trailingMargin.leadingMargin.bottomMargin.equalTo(safeAreaLayoutGuide)
-            make.topMargin.equalTo(searchBar.snp.bottomMargin)
+            make.topMargin.equalTo(searchBar.snp.bottomMargin).offset(20)
             
         }
         

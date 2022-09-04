@@ -22,6 +22,12 @@
 		9E19D6BB28C16ED500DD949C /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 9E19D6BA28C16ED500DD949C /* Realm */; };
 		9E19D6BD28C16ED500DD949C /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9E19D6BC28C16ED500DD949C /* RealmSwift */; };
 		9E19D6C028C16EF500DD949C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9E19D6BF28C16EF500DD949C /* Alamofire */; };
+		9E19D6C428C2062200DD949C /* MainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E19D6C328C2062200DD949C /* MainTableViewCell.swift */; };
+		9E19D6C628C2104500DD949C /* ReusableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E19D6C528C2104500DD949C /* ReusableProtocol.swift */; };
+		9E3A6DB728C48EA600ED02E9 /* realmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A6DB628C48EA600ED02E9 /* realmModel.swift */; };
+		9E3A6DBA28C4901F00ED02E9 /* WriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A6DB928C4901F00ED02E9 /* WriteViewController.swift */; };
+		9E3A6DBC28C4902C00ED02E9 /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A6DBB28C4902C00ED02E9 /* WriteView.swift */; };
+		9E3A6DBE28C4B0AA00ED02E9 /* RealmRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A6DBD28C4B0AA00ED02E9 /* RealmRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +43,12 @@
 		9E19D6AC28C16BC600DD949C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		9E19D6AF28C16BD100DD949C /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		9E19D6B128C16BDB00DD949C /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		9E19D6C328C2062200DD949C /* MainTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewCell.swift; sourceTree = "<group>"; };
+		9E19D6C528C2104500DD949C /* ReusableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableProtocol.swift; sourceTree = "<group>"; };
+		9E3A6DB628C48EA600ED02E9 /* realmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = realmModel.swift; sourceTree = "<group>"; };
+		9E3A6DB928C4901F00ED02E9 /* WriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewController.swift; sourceTree = "<group>"; };
+		9E3A6DBB28C4902C00ED02E9 /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
+		9E3A6DBD28C4B0AA00ED02E9 /* RealmRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +86,8 @@
 		9E19D69428C16B3F00DD949C /* MemoApp */ = {
 			isa = PBXGroup;
 			children = (
+				9E3A6DBF28C4B1AB00ED02E9 /* Realm */,
+				9E3A6DB828C48FC800ED02E9 /* Write */,
 				9E19D6AE28C16BC900DD949C /* Base */,
 				9E19D6AB28C16B7E00DD949C /* Main */,
 				9E19D69528C16B3F00DD949C /* AppDelegate.swift */,
@@ -82,6 +96,7 @@
 				9E19D69E28C16B4000DD949C /* Assets.xcassets */,
 				9E19D6A028C16B4000DD949C /* LaunchScreen.storyboard */,
 				9E19D6A328C16B4000DD949C /* Info.plist */,
+				9E19D6C528C2104500DD949C /* ReusableProtocol.swift */,
 			);
 			path = MemoApp;
 			sourceTree = "<group>";
@@ -92,6 +107,7 @@
 				9E19D69B28C16B3F00DD949C /* Main.storyboard */,
 				9E19D6A928C16B6D00DD949C /* MainViewController.swift */,
 				9E19D6AC28C16BC600DD949C /* MainView.swift */,
+				9E19D6C328C2062200DD949C /* MainTableViewCell.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -103,6 +119,24 @@
 				9E19D6B128C16BDB00DD949C /* BaseViewController.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		9E3A6DB828C48FC800ED02E9 /* Write */ = {
+			isa = PBXGroup;
+			children = (
+				9E3A6DB928C4901F00ED02E9 /* WriteViewController.swift */,
+				9E3A6DBB28C4902C00ED02E9 /* WriteView.swift */,
+			);
+			path = Write;
+			sourceTree = "<group>";
+		};
+		9E3A6DBF28C4B1AB00ED02E9 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				9E3A6DBD28C4B0AA00ED02E9 /* RealmRepository.swift */,
+				9E3A6DB628C48EA600ED02E9 /* realmModel.swift */,
+			);
+			path = Realm;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -190,12 +224,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E19D69A28C16B3F00DD949C /* ViewController.swift in Sources */,
+				9E3A6DBA28C4901F00ED02E9 /* WriteViewController.swift in Sources */,
 				9E19D69628C16B3F00DD949C /* AppDelegate.swift in Sources */,
+				9E19D6C428C2062200DD949C /* MainTableViewCell.swift in Sources */,
+				9E3A6DB728C48EA600ED02E9 /* realmModel.swift in Sources */,
 				9E19D69828C16B3F00DD949C /* SceneDelegate.swift in Sources */,
 				9E19D6B028C16BD100DD949C /* BaseView.swift in Sources */,
 				9E19D6AD28C16BC600DD949C /* MainView.swift in Sources */,
+				9E3A6DBE28C4B0AA00ED02E9 /* RealmRepository.swift in Sources */,
+				9E3A6DBC28C4902C00ED02E9 /* WriteView.swift in Sources */,
 				9E19D6B228C16BDB00DD949C /* BaseViewController.swift in Sources */,
 				9E19D6AA28C16B6D00DD949C /* MainViewController.swift in Sources */,
+				9E19D6C628C2104500DD949C /* ReusableProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +390,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -378,6 +419,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
