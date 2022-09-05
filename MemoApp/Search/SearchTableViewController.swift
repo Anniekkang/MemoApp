@@ -22,6 +22,7 @@ class SearchTableViewController: UITableViewController {
         view.backgroundColor = .black
         let nib = UINib(nibName: "SearchTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: SearchTableViewCell.reuseIdentifier)
+        tableView = UITableView(frame: .zero, style: .insetGrouped)
         
         setupSearchController()
         
@@ -65,7 +66,8 @@ class SearchTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchTableViewCell", for: indexPath) as! SearchTableViewCell
-        
+       
+        return cell
     }
 
 }
