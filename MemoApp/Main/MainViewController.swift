@@ -18,6 +18,7 @@ class MainViewController: BaseViewController {
     let mainView = MainView()
    
   
+    
    
     let localRealm = try! Realm()
     
@@ -70,22 +71,24 @@ class MainViewController: BaseViewController {
         self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.tintColor = UIColor.clear
       
+        searchController.searchResultsUpdater = self
         
-        searchController.searchBar.searchTextField.addTarget(self, action: #selector(textFieldTapped), for: .touchUpInside)
-        
+//        searchController.searchBar.searchTextField.addTarget(self, action: #selector(textFieldTapped), for: .editingDidEnd)
+//
        
         
         
     }
     
-    @objc func textFieldTapped(){
-        let vc = SearchTableViewController()
-        self.navigationController?.present(vc, animated: true)
-    }
-   
-    
-    
-    
+//    @objc func textFieldTapped(){
+//        let vc = SearchTableViewController()
+//        vc.modalPresentationStyle = .fullScreen
+//        self.present(vc, animated: true)
+//
+//
+//
+//    }
+//
     
     override func viewWillAppear(_ animated: Bool) {
     
@@ -140,7 +143,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         if section == 0 {
             return fixedMemoCount
         } else {
-            return tasks.count
+            return tasks.count - fixedMemoCount
         }
         
        
@@ -186,40 +189,59 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
+         //realm에서 false를 true 로 바꿈.혹은 반대
         let fixed = UIContextualAction(style: .normal, title: "fixed") { action, view, completionHandler in
             
             try! self.localRealm.write{
                 
                 self.tasks[indexPath.row].fixed = !self.tasks[indexPath.row].fixed
                 self.fetchRealm()
-               
+                //false가 true로 바뀜
+                
             }
-
+   
         }
-
-        fixed.image = UIImage(systemName: "pin.fill" )
+  
         fixed.backgroundColor = .orange
         fixed.image?.withTintColor(.white)
+        //realm 에서 fixed 값이 true인 data -> section 0, false -> section 1
+    
+        if memoModel().fixed {
+            //true (section = 0)
+            fixed.image = UIImage(systemName: "pin.slash.fill")
+            fixedMemoCount += 1
+        } else {
+            //false (section = 1)
+            fixed.image = UIImage(systemName: "pin.fill")
+            fixedMemoCount -= 1
+        }
         
         
+        tableView.reloadData()
+        
+        if fixedMemoCount > 5 {
+                let alert = UIContextualAction(style: .normal, title: "deny") { action, view, completionHandler in
+                
+                self.makeAlert(message: "더이상 추가할 수 없습니다", button: "확인")
+
+                
+                }
+        
+            return UISwipeActionsConfiguration(actions: [alert])
+        }
         
         return UISwipeActionsConfiguration(actions: [fixed])
-        
     }
-    
+   
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let delete = UIContextualAction(style: .destructive, title: "delete") { action, view, completionHandler in
             
             try! self.localRealm.write({
                 self.localRealm.delete(self.tasks[indexPath.row])
-                
-                
-                
-                
+            
             })
-    
+            tableView.reloadData()
     }
         
         return UISwipeActionsConfiguration(actions: [delete] )
@@ -249,20 +271,17 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
-    
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//
-//            if let tasksFordeletion = tasks?[indexPath.row] {
-//                try! localRealm.write({
-//                    localRealm.delete(tasksFordeletion)
-//                })
-//                tableView.deleteRows(at: [indexPath], with: .automatic)
-//        }
-//    }
-// }
+
   
-  
+}
+
+extension MainViewController : UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let vc = SearchTableViewController()
+        let navi = UINavigationController(rootViewController: vc)
+        navi.modalPresentationStyle = .fullScreen
+        self.present(navi, animated: true)
+    }
 }
 
 //extension UIColor {
