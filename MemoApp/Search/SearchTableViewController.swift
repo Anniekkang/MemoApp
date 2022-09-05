@@ -19,7 +19,7 @@ class SearchTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .black
+        view.backgroundColor = .darkGray
         let nib = UINib(nibName: "SearchTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: SearchTableViewCell.reuseIdentifier)
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -31,10 +31,14 @@ class SearchTableViewController: UITableViewController {
 
     func setupSearchController(){
         
+        //검색결과를 업데이트 할 때 이용할 뷰컨트롤러
        
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "검색"
         self.navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
+        searchController.automaticallyShowsCancelButton = true
+        searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.backgroundColor = UIColor.darkGray
         var isSearchBarEmpty : Bool {
             return searchController.searchBar.text?.isEmpty ?? true
@@ -76,7 +80,9 @@ extension SearchTableViewController : UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
        
         guard let text = searchController.searchBar.text?.lowercased() else { return }
+        print(text)
         filteredArr = localRealm.objects(memoModel.self).filter(text)
      
     }
+    
 }

@@ -90,9 +90,9 @@ class WriteViewController: BaseViewController {
                //나타내기
         
                
-               
+              
                MainViewController().mainView.tableView.reloadData()
-               dismiss(animated: true)
+               
                
                
                
