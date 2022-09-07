@@ -19,7 +19,11 @@ class SearchTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        UITableViewController().tableView.delegate = self
+        UITableViewController().tableView.dataSource = self
+        
         view.backgroundColor = .darkGray
+        tableView.backgroundColor = .black
         let nib = UINib(nibName: "SearchTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: SearchTableViewCell.reuseIdentifier)
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -31,15 +35,17 @@ class SearchTableViewController: UITableViewController {
 
     func setupSearchController(){
         
-        //검색결과를 업데이트 할 때 이용할 뷰컨트롤러
+      
        
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "검색"
         self.navigationItem.searchController = searchController
         searchController.searchResultsUpdater = self
         searchController.automaticallyShowsCancelButton = true
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.backgroundColor = UIColor.darkGray
+        searchController.obscuresBackgroundDuringPresentation = true
+        self.navigationController?.navigationBar.tintColor = UIColor.clear
+        searchController.hidesNavigationBarDuringPresentation = false
+      
         var isSearchBarEmpty : Bool {
             return searchController.searchBar.text?.isEmpty ?? true
         
@@ -54,7 +60,7 @@ class SearchTableViewController: UITableViewController {
     
     @objc func searchTextFieldTapped(){
         
-        SearchTableViewController().dismiss(animated: true, completion: nil)
+        print(10)
   
     }
 

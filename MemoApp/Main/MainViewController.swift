@@ -11,19 +11,18 @@ import RealmSwift
 import SwiftUI
 
 
-class MainViewController: BaseViewController {
+class MainViewController: BaseViewController, UISearchBarDelegate, UISearchControllerDelegate {
 
     let localRealm = try! Realm()
     
+
+   
     
-    var filteredArr: [String] = []
     var tasks : Results<memoModel>!
     var writeButton: UIBarButtonItem!
-    var fixedMemoCount = 0
     let mainView = MainView()
-    
-   
-  
+    let memoModelArr : [[String]] = []
+    var fixedMemoCount = 0
     
     override func loadView() {
         self.view = mainView
@@ -48,6 +47,14 @@ class MainViewController: BaseViewController {
 
     }
     
+    func dateFormatter(){
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        
+        
+        
+    }
+   
     func numberformatter(count : Int) -> String {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
@@ -58,7 +65,7 @@ class MainViewController: BaseViewController {
     
     func setupSearchController(){
         
-        let searchController = UISearchController(searchResultsController: SearchTableViewController())
+        let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "검색"
         self.navigationItem.searchController = searchController
         
@@ -71,13 +78,16 @@ class MainViewController: BaseViewController {
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
+        searchController.searchResultsUpdater = self
         searchController.searchBar.tintColor = UIColor.orange
-        
+        searchController.searchBar.delegate = self
+        searchController.delegate = self
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.tintColor = UIColor.clear
-      
+        searchController.searchBar.searchTextField.addTarget(self, action: #selector(searchTextFieldTapped), for: .touchUpInside)
+       
      
         if tasks.count >= 1000 {
             self.navigationItem.title = "numberformatter(count: tasks.count)개의 메모"
@@ -86,6 +96,16 @@ class MainViewController: BaseViewController {
         }
         
     }
+    
+    @objc func searchTextFieldTapped(){
+        
+        
+        
+        
+        
+    }
+    
+    
     override func viewWillAppear(_ animated: Bool) {
     
         fetchRealm()
@@ -126,8 +146,27 @@ class MainViewController: BaseViewController {
         mainView.tableView.backgroundColor = .black
     }
 
+    var isFiltering: Bool {
+        
+        let searchController = self.navigationItem.searchController
+        let isActive = searchController?.isActive ?? false
+        let isSearchBarHasText = searchController?.searchBar.text?.isEmpty == false
+      
+        return isActive && isSearchBarHasText
     
+    }
+    
+    //[title, contents, date] 인 배열 만들기
+    func makeArray(title : String, contents : String?, date : Date){
+            
+        
+        
+        
+        
+    }
+
 }
+
 
 extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     
@@ -196,7 +235,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
                 
             }
             
-            switch self.tasks[indexPath.section].fixed {
+            switch self.tasks[indexPath.row].fixed {
             case true:
                 
                 self.fixedMemoCount += 1
@@ -205,11 +244,14 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
                 self.fixedMemoCount -= 1
             }
          
-        }
-    
-        if self.fixedMemoCount > 5 {
-                makeAlert(message: "더이상 추가할 수 없습니다")
- 
+            
+        
+            if self.fixedMemoCount > 5 {
+                self.makeAlert(message: "더이상 추가할 수 없습니다")
+     
+            }
+            tableView.reloadData()
+            
         }
         
         let image = self.tasks[indexPath.row].fixed ? "pin.slash.fill" : "pin.fill"
@@ -218,7 +260,6 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         fixed.image?.withTintColor(.white)
         
         
-        tableView.reloadData()
         return UISwipeActionsConfiguration(actions: [fixed])
     }
    
@@ -251,12 +292,8 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.reuseIdentifier, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
         
     
-        
         cell.backgroundColor = .systemGray
-        cell.titleLabel.text = tasks[indexPath.row].title
-        cell.contentsLabel.text = tasks[indexPath.row].contents
-        cell.timeLabel.text = "\(tasks[indexPath.row].date)"
-        cell.contentView.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
+        
      
         return cell
         
@@ -266,8 +303,28 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         return 70
     }
 
-  
+
+    
+    
+    
 }
+
+
+    
+extension MainViewController : UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        
+        guard let text = searchController.searchBar.text?.lowercased() else { return }
+        print(text)
+        //memoModel의 title과 contents가 text를 포함하고 있는지 확인 -> true면 보여주기
+        
+    }
+    
+
+    
+}
+    
+    
 
 //extension UIColor {
 //    static var navigationBarColor : UIColor {

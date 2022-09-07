@@ -23,18 +23,9 @@ class MainView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-//    let searchBar : UISearchBar = {
-//        let view = UISearchBar()
-//        view.placeholder = "검색"
-//        view.barTintColor = .darkGray
-//        view.searchTextField.backgroundColor = .systemGray
-//        return view
-//    }()
-    
     let tableView : UITableView = {
         let view = UITableView(frame: .zero, style: .insetGrouped)
-        view.layer.cornerRadius = 8
+        
         
         return view
         
@@ -47,11 +38,7 @@ class MainView: BaseView {
     }
     
     override func setConstraints() {
-//        searchBar.snp.makeConstraints { make in
-//            make.trailingMargin.topMargin.equalTo(10)
-//            make.leadingMargin.equalTo(-10)
-//
-//        }
+
         tableView.snp.makeConstraints { make in
             make.leadingMargin.trailingMargin.bottomMargin.equalTo(safeAreaLayoutGuide)
             make.topMargin.equalTo(20)

@@ -9,7 +9,7 @@ import UIKit
 import RealmSwift
 
 class memoModel : Object {
-    @Persisted var title : String
+    @Persisted var title : String//list형태로 생김
     @Persisted var date : Date
     @Persisted var contents : String?
     @Persisted var fixed : Bool
@@ -17,14 +17,19 @@ class memoModel : Object {
     
     @Persisted(primaryKey: true) var objectId : ObjectId
     
-    convenience init(title :String,contents : String?){
+    
+   
+
+    convenience init(title :String,date: Date, contents :String?){
         self.init()
         self.title = title
-        self.date  = Date()
+        self.date  = date
         self.fixed = false
         self.contents = contents
-        
-  
+
+
     }
-    
+
 }
+
+

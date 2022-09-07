@@ -77,7 +77,7 @@ class WriteViewController: BaseViewController {
            } else {
             //save text(realm)
                let contents = mainView.textview.text
-               let task = memoModel(title: "mola", contents: contents)
+               let task = memoModel(title: "mola",date: Date(), contents: contents)
                do {
                    try localRealm.write{
                               localRealm.add(task)
