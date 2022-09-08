@@ -13,7 +13,11 @@ import SwiftUI
 
 class MainViewController: BaseViewController, UISearchBarDelegate, UISearchControllerDelegate {
 
+
+        
     let localRealm = try! Realm()
+    
+   
     
 
    
@@ -21,8 +25,15 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
     var tasks : Results<memoModel>!
     var writeButton: UIBarButtonItem!
     let mainView = MainView()
-    let memoModelArr : [[String]] = []
+    var memoTitle : [String] = [memoModel().title]
+    var memoContents : [String] = [memoModel().contents]
     var fixedMemoCount = 0
+    var filteredArr : [String] = []//title과 text 모두 포함된 것들 저장
+    var filteredCell : [memoModel] = []
+    
+    
+    
+    
     
     override func loadView() {
         self.view = mainView
@@ -32,6 +43,8 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
+        
         print("Realm is located at:", localRealm.configuration.fileURL!)
        
         mainView.backgroundColor = .darkGray
@@ -156,14 +169,6 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
     
     }
     
-    //[title, contents, date] 인 배열 만들기
-    func makeArray(title : String, contents : String?, date : Date){
-            
-        
-        
-        
-        
-    }
 
 }
 
@@ -172,19 +177,46 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        if self.isFiltering {
+          return 1
+        } else {
+            return 2
+        }
+        
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //active and hastext 일 때
+        if self.isFiltering {
+            return filteredCell.count
+        } else {
+      
         if section == 0 {
             return fixedMemoCount
         } else {
             return tasks.count - fixedMemoCount
         }
         
-       
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        
+        if self.isFiltering {
+            let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 50))
+            let label = UILabel()
+            label.frame = CGRect.init(x: 0 , y: 0, width: headerView.frame.width, height: headerView.frame.height)
+            label.text = "\(filteredArr.count)개 찾음 "
+            label.font = .systemFont(ofSize: 25, weight: .bold)
+            label.textColor = .white
+
+            headerView.addSubview(label)
+            return headerView
+            
+            
+        } else {
+        
+        
         if section == 0 {
             if fixedMemoCount == 0 {
                 let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 0))
@@ -217,7 +249,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
             
         }
         
-        
+        }
         
 
     }
@@ -293,7 +325,14 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         
     
         cell.backgroundColor = .systemGray
-        
+        if self.isFiltering {
+            cell.textLabel?.text = filteredCell[indexPath.row].title
+            cell.contentsLabel.text = filteredCell[indexPath.row].contents
+            cell.timeLabel.text = "\(filteredCell[indexPath.row].date)"
+            
+        } else {
+            
+        }
      
         return cell
         
@@ -303,29 +342,47 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         return 70
     }
 
-
-    
-    
-    
+ 
 }
+
+extension Results {
+    func toArray() -> [Element] {
+      return compactMap {
+        $0
+      }
+    }
+ }
+
 
 
     
 extension MainViewController : UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         
-        guard let text = searchController.searchBar.text?.lowercased() else { return }
-        print(text)
-        //memoModel의 title과 contents가 text를 포함하고 있는지 확인 -> true면 보여주기
         
-    }
+        let someModelResults: Results<memoModel> = localRealm.objects(memoModel.self)
+        let someModelArray: [memoModel] = someModelResults.toArray()
+        
+        guard let text = searchController.searchBar.text?.lowercased() else { return }
+        
+        
+        //memoModel의 포함된 title과 contents 를 fileredArr에 담기
+        self.filteredArr = self.memoTitle.filter { $0.lowercased().contains(text)}
+        self.filteredArr = self.memoContents.filter { $0.lowercased().contains(text)}
+        dump(filteredArr)//filteredArr = [title, contents....]
+        
+        self.filteredCell = someModelArray.filter({ $0.contents.contains(text) || $0.title.contains(text) })
+        
+        
+        
+        mainView.tableView.reloadData()
     
 
     
 }
     
     
-
+}
 //extension UIColor {
 //    static var navigationBarColor : UIColor {
 //        if #available(iOS 13, *) {

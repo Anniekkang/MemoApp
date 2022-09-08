@@ -76,7 +76,7 @@ class WriteViewController: BaseViewController {
             self.navigationController?.popViewController(animated: true)
            } else {
             //save text(realm)
-               let contents = mainView.textview.text
+               let contents = mainView.textview.text ?? ""
                let task = memoModel(title: "mola",date: Date(), contents: contents)
                do {
                    try localRealm.write{

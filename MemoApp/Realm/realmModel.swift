@@ -11,7 +11,7 @@ import RealmSwift
 class memoModel : Object {
     @Persisted var title : String//list형태로 생김
     @Persisted var date : Date
-    @Persisted var contents : String?
+    @Persisted var contents : String
     @Persisted var fixed : Bool
    
     
@@ -20,7 +20,7 @@ class memoModel : Object {
     
    
 
-    convenience init(title :String,date: Date, contents :String?){
+    convenience init(title :String,date: Date, contents :String){
         self.init()
         self.title = title
         self.date  = date
