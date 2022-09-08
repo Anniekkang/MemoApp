@@ -165,7 +165,7 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
         let isActive = searchController?.isActive ?? false
         let isSearchBarHasText = searchController?.searchBar.text?.isEmpty == false
       
-        return isActive && isSearchBarHasText
+        return isActive || isSearchBarHasText
     
     }
     
@@ -342,6 +342,13 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         return 70
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let vc = WriteViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+        
+    }
  
 }
 
@@ -376,9 +383,7 @@ extension MainViewController : UISearchResultsUpdating {
         
         
         mainView.tableView.reloadData()
-    
-
-    
+   
 }
     
     
