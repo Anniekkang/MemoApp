@@ -21,30 +21,27 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
     
 
    
-    
+   
     var tasks : Results<memoModel>!
     var writeButton: UIBarButtonItem!
     let mainView = MainView()
-    var memoTitle : [String] = [memoModel().title]
-    var memoContents : [String] = [memoModel().contents]
     var fixedMemoCount = 0
-    var filteredArr : [String] = []//title과 text 모두 포함된 것들 저장
     var filteredCell : [memoModel] = []
     
-    
+   
     
     
     
     override func loadView() {
         self.view = mainView
-        
+        print(#function)
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
        
-        
+        print(#function)
         print("Realm is located at:", localRealm.configuration.fileURL!)
        
         mainView.backgroundColor = .darkGray
@@ -59,6 +56,14 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
         
 
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+    
+        fetchRealm()
+        print(#function)
+    }
+    
+    
     
     func dateFormatter(){
         let dateFormatter = DateFormatter()
@@ -99,7 +104,7 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.tintColor = UIColor.clear
-        searchController.searchBar.searchTextField.addTarget(self, action: #selector(searchTextFieldTapped), for: .touchUpInside)
+        
        
      
         if tasks.count >= 1000 {
@@ -109,20 +114,8 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
         }
         
     }
+
     
-    @objc func searchTextFieldTapped(){
-        
-        
-        
-        
-        
-    }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-    
-        fetchRealm()
-    }
     
     //새롭게 업데이트 된 realm을 가져오는 것
     func fetchRealm(){
@@ -206,7 +199,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
             let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 50))
             let label = UILabel()
             label.frame = CGRect.init(x: 0 , y: 0, width: headerView.frame.width, height: headerView.frame.height)
-            label.text = "\(filteredArr.count)개 찾음 "
+            label.text = "\(filteredCell.count)개 찾음 "
             label.font = .systemFont(ofSize: 25, weight: .bold)
             label.textColor = .white
 
@@ -331,7 +324,9 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
             cell.timeLabel.text = "\(filteredCell[indexPath.row].date)"
             
         } else {
-            
+            cell.textLabel?.text =  tasks[indexPath.row].title
+            cell.contentsLabel.text = tasks[indexPath.row].contents
+            cell.timeLabel.text = "\(tasks[indexPath.row].date)"
         }
      
         return cell
@@ -366,21 +361,14 @@ extension Results {
 extension MainViewController : UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         
-        
         let someModelResults: Results<memoModel> = localRealm.objects(memoModel.self)
         let someModelArray: [memoModel] = someModelResults.toArray()
         
+        
         guard let text = searchController.searchBar.text?.lowercased() else { return }
-        
-        
-        //memoModel의 포함된 title과 contents 를 fileredArr에 담기
-        self.filteredArr = self.memoTitle.filter { $0.lowercased().contains(text)}
-        self.filteredArr = self.memoContents.filter { $0.lowercased().contains(text)}
-        dump(filteredArr)//filteredArr = [title, contents....]
-        
         self.filteredCell = someModelArray.filter({ $0.contents.contains(text) || $0.title.contains(text) })
         
-        
+        dump(filteredCell.count)
         
         mainView.tableView.reloadData()
    
