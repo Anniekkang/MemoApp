@@ -13,7 +13,7 @@ class memoModel : Object {
     @Persisted var date : Date
     @Persisted var contents : String
     @Persisted var fixed : Bool
-   
+    
     
     @Persisted(primaryKey: true) var objectId : ObjectId
     
@@ -31,5 +31,6 @@ class memoModel : Object {
     }
 
 }
+
 
 

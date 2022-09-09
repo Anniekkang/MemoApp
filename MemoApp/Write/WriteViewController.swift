@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import CoreMIDI
 
 class WriteViewController: BaseViewController {
 
@@ -68,6 +69,8 @@ class WriteViewController: BaseViewController {
         
     }
     
+    
+    
     @objc func doneButtonTapped(){
         //save text(realm에 저장) or 아무것도 없을시 삭제함
         
@@ -75,13 +78,26 @@ class WriteViewController: BaseViewController {
         if mainView.textview.text.isEmpty {
             self.navigationController?.popViewController(animated: true)
            } else {
+               //save title
+               let str = mainView.textview.text ?? ""
+               let attributedString = NSMutableAttributedString(string: str)
+               let title = NSAttributedString(string: String(str.firstLine))
+               let range = NSRange(str.rangeOfFirstLine, in: str)
+               attributedString.replaceCharacters(in: range, with: title)
+               
+               //save contents
+               let contents = NSAttributedString(string: String(str.contentsLine))
+               let range2 = NSRange(str.rangeofContents, in : str)
+               attributedString.replaceCharacters(in: range2, with: contents)
+               
             //save text(realm)
-               let contents = mainView.textview.text ?? ""
-               let task = memoModel(title: "mola",date: Date(), contents: contents)
+              
+               let task = memoModel(title: title.string ,date: Date(), contents: contents.string)
                do {
                    try localRealm.write{
                               localRealm.add(task)
                               print("realm succeed")
+                       
                        }
                    } catch {
                        print(Error.self)
@@ -109,10 +125,33 @@ class WriteViewController: BaseViewController {
         self.navigationController?.pushViewController(vc, animated: true)
         
        }
-     
-    
-    
-
-
 
 }
+
+extension StringProtocol where Index == String.Index {
+    var partialRangeOfFirstLine: PartialRangeUpTo<String.Index> {
+        return ..<(rangeOfCharacter(from: .newlines)?.lowerBound ?? endIndex)
+    }
+    
+    var partialRangeOfContents : PartialRangeFrom<String.Index> {
+        return (rangeOfCharacter(from: .newlines)?.upperBound ?? firstLine.endIndex)...
+    }
+  
+    var rangeOfFirstLine: Range<Index> {
+        return startIndex..<partialRangeOfFirstLine.upperBound
+    }
+    
+    var rangeofContents : Range<Index> {
+        return partialRangeOfContents.lowerBound..<endIndex
+    }
+    var firstLine: SubSequence {
+        return self[partialRangeOfFirstLine]
+    }
+    
+    var contentsLine : SubSequence {
+        return self[partialRangeOfContents]
+    }
+    
+}
+
+

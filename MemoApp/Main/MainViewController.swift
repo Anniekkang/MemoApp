@@ -27,7 +27,8 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
     let mainView = MainView()
     var fixedMemoCount = 0
     var filteredCell : [memoModel] = []
-    
+    var sectionZeroArr : [memoModel] = []
+    var sectionOneArr : [memoModel] = []
    
     
     
@@ -49,6 +50,7 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
         configuration()
         toolbarDesign()
         setupSearchController()
+        
         
         
         makeAlert(message: "처음 오셨군요! \n 환영합니다 :) \n\n 당신만의 메모를 작성하고 \n 관리해보세요!")
@@ -177,6 +179,36 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         }
         
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.reuseIdentifier, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
+        
+    
+        
+        
+        
+        cell.backgroundColor = .systemGray
+        
+        
+        if self.isFiltering {
+            
+            cell.textLabel?.text = filteredCell[indexPath.row].title
+            cell.contentsLabel.text = filteredCell[indexPath.row].contents
+            cell.timeLabel.text = "\(filteredCell[indexPath.row].date)"
+            
+            
+        } else {
+           
+            cell.textLabel?.text =  tasks[indexPath.row].title
+            cell.contentsLabel.text = tasks[indexPath.row].contents
+            cell.timeLabel.text = "\(tasks[indexPath.row].date)"
+            
+        }
+     
+        return cell
+        
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //active and hastext 일 때
         if self.isFiltering {
@@ -247,10 +279,10 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
 
     }
     
-
+ 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
          //realm에서 false를 true 로 바꿈.혹은 반대
-        let fixed = UIContextualAction(style: .normal, title: "fixed") { action, view, completionHandler in
+        let fixed = UIContextualAction(style: .normal, title: "fixed") { [self] action, view, completionHandler in
             
             try! self.localRealm.write{
                 
@@ -260,15 +292,27 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
                 
             }
             
+            
             switch self.tasks[indexPath.row].fixed {
             case true:
                 
                 self.fixedMemoCount += 1
+                self.sectionZeroArr.append(self.tasks[indexPath.row] )
+                if self.sectionOneArr.contains(self.tasks[indexPath.row]) {
+                    self.sectionOneArr.remove(at: [indexPath][0].row)
+                }
+                     
             case false:
                 
                 self.fixedMemoCount -= 1
+                
+        
+                self.sectionOneArr.append(self.tasks[indexPath.row] )
+                if self.sectionZeroArr.contains(self.tasks[indexPath.row]) {
+                    self.sectionZeroArr.remove(at: [indexPath][0].row)
+                }
+                     
             }
-         
             
         
             if self.fixedMemoCount > 5 {
@@ -279,6 +323,8 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
             
         }
         
+        
+        
         let image = self.tasks[indexPath.row].fixed ? "pin.slash.fill" : "pin.fill"
         fixed.image = UIImage(systemName: image)
         fixed.backgroundColor = .orange
@@ -287,7 +333,10 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         
         return UISwipeActionsConfiguration(actions: [fixed])
     }
+    
+    
    
+    
     
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -313,25 +362,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     }
    
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.reuseIdentifier, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
-        
-    
-        cell.backgroundColor = .systemGray
-        if self.isFiltering {
-            cell.textLabel?.text = filteredCell[indexPath.row].title
-            cell.contentsLabel.text = filteredCell[indexPath.row].contents
-            cell.timeLabel.text = "\(filteredCell[indexPath.row].date)"
-            
-        } else {
-            cell.textLabel?.text =  tasks[indexPath.row].title
-            cell.contentsLabel.text = tasks[indexPath.row].contents
-            cell.timeLabel.text = "\(tasks[indexPath.row].date)"
-        }
-     
-        return cell
-        
-    }
+   
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
@@ -357,7 +388,7 @@ extension Results {
 
 
 
-    
+//search
 extension MainViewController : UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         
