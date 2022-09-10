@@ -13,20 +13,20 @@ class memoModel : Object {
     @Persisted var date : Date
     @Persisted var contents : String
     @Persisted var fixed : Bool
-    
+    @Persisted var status : Int
     
     @Persisted(primaryKey: true) var objectId : ObjectId
     
     
    
 
-    convenience init(title :String,date: Date, contents :String){
+    convenience init(title :String,date: Date, contents :String,status : Int){
         self.init()
         self.title = title
         self.date  = date
         self.fixed = false
         self.contents = contents
-
+        self.status = 0
 
     }
 

@@ -86,7 +86,7 @@ class WriteViewController: BaseViewController, UINavigationControllerDelegate {
                
             //save text(realm)
               
-               let task = memoModel(title: title.string ,date: Date(), contents: contents.string)
+               let task = memoModel(title: title.string ,date: Date(), contents: contents.string, status: 0)
                do {
                    try localRealm.write{
                               localRealm.add(task)
@@ -124,7 +124,7 @@ class WriteViewController: BaseViewController, UINavigationControllerDelegate {
                
             //save text(realm)
               
-               let task = memoModel(title: title.string ,date: Date(), contents: contents.string)
+               let task = memoModel(title: title.string ,date: Date(), contents: contents.string, status: 0)
                do {
                    try localRealm.write{
                               localRealm.add(task)

@@ -369,8 +369,19 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedRealm = tasks[indexPath.row]
         
-        let vc = WriteViewController()
+        try! self.localRealm.write({
+                if (selectedRealm.status == 0){
+                    selectedRealm.status = 1
+                }else{
+                    selectedRealm.status = 0
+                }
+            })
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+        
+        
+        let vc = ModifiedViewController()
         self.navigationController?.pushViewController(vc, animated: true)
         
         
