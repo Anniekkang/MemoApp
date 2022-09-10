@@ -407,14 +407,15 @@ extension MainViewController : UISearchResultsUpdating {
         let someModelArray: [memoModel] = someModelResults.toArray()
         
         
-        guard let text = searchController.searchBar.text?.lowercased() else { return }
+        guard let text = searchController.searchBar.text else { return }
+        print(text)
         self.filteredCell = someModelArray.filter({ $0.contents.contains(text) || $0.title.contains(text) })
         
         dump(filteredCell.count)
         
         mainView.tableView.reloadData()
    
-}
+    }
     
     
 }

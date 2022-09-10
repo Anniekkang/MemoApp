@@ -10,9 +10,9 @@ import RealmSwift
 import Network
 
 class ModifiedViewController: BaseViewController, UITextViewDelegate {
-
+    
     let localRealm = try! Realm()
-   
+    
     var tasks : Results<memoModel>! {
         didSet {
             print("tasked changed!")
@@ -28,17 +28,17 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         mainView.backgroundColor = .darkGray
         naviDesign()
         textSetup()
         self.mainView.textview.delegate = self
     }
     
-
+    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-       
+        
         changeRightNavi()
         textView.isUserInteractionEnabled = true
     }
@@ -60,7 +60,7 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
         rightButton.tintColor = .orange
         shareButton.tintColor = .orange
         navigationItem.rightBarButtonItems = [rightButton,shareButton]
-   
+        
         
     }
     
@@ -71,53 +71,53 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
         
         if mainView.textview.text.isEmpty {
             self.navigationController?.popViewController(animated: true)
-           } else {
-               
-               //save title
-               let str = mainView.textview.text ?? ""
-               let attributedString = NSMutableAttributedString(string: str)
-               let title = NSAttributedString(string: String(str.firstLine))
-               let range = NSRange(str.rangeOfFirstLine, in: str)
-               attributedString.replaceCharacters(in: range, with: title)
-               
-               //save contents
-               let contents = NSAttributedString(string: String(str.contentsLine))
-               let range2 = NSRange(str.rangeofContents, in : str)
-               attributedString.replaceCharacters(in: range2, with: contents)
-               
-               
-               
-            //save text(realm)
-              
-               let task = localRealm.objects(memoModel.self).first!
-               do {
-                    
-                       try localRealm.write{
-                           task.donebuttonStatus = true
-                           task.title = title.string
-                           task.date = Date()
-                           task.contents = contents.string
-                           task.status = 0
-                        }
-                       
-                       
-                            
-                    print("realm succeed")
-                       
-                       }
-                    catch {
-                       print(Error.self)
-                   }
+        } else {
             
-               //나타내기
-        
-               MainViewController().mainView.tableView.reloadData()
-      
+            //save title
+            let str = mainView.textview.text ?? ""
+            let attributedString = NSMutableAttributedString(string: str)
+            let title = NSAttributedString(string: String(str.firstLine))
+            let range = NSRange(str.rangeOfFirstLine, in: str)
+            attributedString.replaceCharacters(in: range, with: title)
+            
+            //save contents
+            let contents = NSAttributedString(string: String(str.contentsLine))
+            let range2 = NSRange(str.rangeofContents, in : str)
+            attributedString.replaceCharacters(in: range2, with: contents)
+            
+            
+            
+            //save text(realm)
+            
+            let task = localRealm.objects(memoModel.self).first!
+            do {
+                
+                try localRealm.write{
+                    task.donebuttonStatus = true
+                    task.title = title.string
+                    task.date = Date()
+                    task.contents = contents.string
+                    task.status = 0
+                }
+                
+                
+                
+                print("realm succeed")
+                
+            }
+            catch {
+                print(Error.self)
+            }
+            
+            //나타내기
+            
+            MainViewController().mainView.tableView.reloadData()
+            
         }
-
+        
     }
-
- 
+    
+    
     
     func textSetup(){
         //data 가져오기(title,contents)
@@ -126,10 +126,10 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
         dump(selectedRealm)
         
         mainView.textview.text = selectedRealm[0].title + "\n" + selectedRealm[0].contents
-  
+        
         
     }
-   
+    
     func naviDesign(){
         //navigationitem design
         let leftButton = UIButton(type: .system)
@@ -145,7 +145,7 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
         let rightShareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonTapped))
         rightShareButton.tintColor = .orange
         navigationItem.rightBarButtonItem = rightShareButton
-
+        
         
         
     }
@@ -196,18 +196,18 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
                 //save title
                 
                 
-               try! localRealm.write {
+                try! localRealm.write {
                     localRealm.objects(memoModel.self).first?.donebuttonStatus = false
                 }
                 
             }
             //나타내기
             MainViewController().mainView.tableView.reloadData()
-           
+            
             
         }
         
-       
+        
         let vc = MainViewController()
         self.navigationController?.pushViewController(vc, animated: true)
         
@@ -219,6 +219,6 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
         
         
     }
-
+    
     
 }
