@@ -62,15 +62,16 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
    
         
     }
-    // MARK:  이 아래 버튼을 누르면 기존의 것이 변경되는것이아니라 새로 생겨서 저장된다
+    
     @objc func donebuttonTapped(){
-        
+        //변화가 있을 시 -> 업데이트, 없을시 그대로 이전화면으로 돌아감
         //save text(realm에 저장) or 아무것도 없을시 저장안함
         
         
         if mainView.textview.text.isEmpty {
             self.navigationController?.popViewController(animated: true)
            } else {
+               
                //save title
                let str = mainView.textview.text ?? ""
                let attributedString = NSMutableAttributedString(string: str)
@@ -87,21 +88,23 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
                
             //save text(realm)
               
-               let task = memoModel(title: title.string ,date: Date(), contents: contents.string, status: 0, donebuttonStatus: true)
+               let task = localRealm.objects(memoModel.self).first!
                do {
-                   try localRealm.write{
-                       if task.donebuttonStatus == false {
+                    
+                       try localRealm.write{
                            task.donebuttonStatus = true
                            task.title = title.string
                            task.date = Date()
                            task.contents = contents.string
                            task.status = 0
-                       }
+                        }
+                       
+                       
                             
-                              print("realm succeed")
+                    print("realm succeed")
                        
                        }
-                   } catch {
+                    catch {
                        print(Error.self)
                    }
             
@@ -185,6 +188,7 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
             } else {
                 //true = 저장버튼 눌림(realm에 status 를 false로 업데이트)
                 //save title
+                
                 
                try! localRealm.write {
                     localRealm.objects(memoModel.self).first?.donebuttonStatus = false
