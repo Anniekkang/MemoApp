@@ -26,7 +26,7 @@ class memoModel : Object {
         self.date  = date
         self.fixed = false//즐겨찾기고정(true-고정, false - 고정x)
         self.contents = contents
-        self.status = 0
+        self.status = 0//cell선택여부(선택 - 1, 선택x - 0)
         self.donebuttonStatus = false//done눌리면true, 안눌리면-false
 
     }

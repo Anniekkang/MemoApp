@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import Network
 
 class ModifiedViewController: BaseViewController, UITextViewDelegate {
 
@@ -157,6 +158,7 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
             
             
         } else {
+            
             if localRealm.objects(memoModel.self).filter("donebuttonStatus == true").isEmpty{
                 //false 일 떄,저장버튼안눌림, 이동하기, realm의 donebuttonStataus = false 그대로
                 
@@ -176,7 +178,11 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
                 let task = memoModel(title: title.string ,date: Date(), contents: contents.string, status: 0, donebuttonStatus: false)
                 do {
                     try localRealm.write{
-                        localRealm.add(task)
+                        task.title = title.string
+                        task.date = Date()
+                        task.contents = contents.string
+                        task.status = 0
+                        task.donebuttonStatus = false
                         print("realm succeed")
                         
                     }
@@ -201,12 +207,11 @@ class ModifiedViewController: BaseViewController, UITextViewDelegate {
             
         }
         
+       
         let vc = MainViewController()
         self.navigationController?.pushViewController(vc, animated: true)
         
-       }
-        
-    
+    }
     @objc func shareButtonTapped(){
         
         
