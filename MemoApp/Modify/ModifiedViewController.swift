@@ -35,13 +35,14 @@ class ModifiedViewController: BaseViewController {
     }
     
     func textSetup(){
-        //data 가져오기(title,contents) & status = 0 으로 바꿔주기
+        //data 가져오기(title,contents)
         let selectedRealm = localRealm.objects(memoModel.self).filter("status == 1")
         
         dump(selectedRealm)
         
         mainView.textview.text = selectedRealm[0].title + "\n" + selectedRealm[0].contents
   
+        
     }
    
     func naviDesign(){
@@ -69,7 +70,8 @@ class ModifiedViewController: BaseViewController {
         if mainView.textview.text.isEmpty {
             //기존에 있던 메모 지우기
             
-            self.navigationController?.popViewController(animated: true)
+            
+            
         } else {
             //save title
             let str = mainView.textview.text ?? ""
@@ -83,12 +85,16 @@ class ModifiedViewController: BaseViewController {
             let range2 = NSRange(str.rangeofContents, in : str)
             attributedString.replaceCharacters(in: range2, with: contents)
             
-            //save text(realm)
             
-            let task = memoModel(title: title.string ,date: Date(), contents: contents.string, status: 0)
+            //save text(realm) && status == 0
+            
+            let task = localRealm.objects(memoModel.self).first!
             do {
                 try localRealm.write{
-                    localRealm.add(task)
+                    task.title = title.string
+                    task.contents = contents.string
+                    task.date = Date()
+                    task.status = 0
                     print("realm succeed")
                     
                 }
@@ -99,7 +105,7 @@ class ModifiedViewController: BaseViewController {
             //나타내기
             
             MainViewController().mainView.tableView.reloadData()
-            
+           
             
         }
         
