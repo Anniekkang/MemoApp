@@ -66,7 +66,7 @@ class WriteViewController: BaseViewController, UINavigationControllerDelegate {
     
     
     @objc func doneButtonTapped(){
-        //save text(realm에 저장) or 아무것도 없을시 삭제함
+        //save text(realm에 저장) or 아무것도 없을시 저장안함
         
         
         if mainView.textview.text.isEmpty {
@@ -84,11 +84,16 @@ class WriteViewController: BaseViewController, UINavigationControllerDelegate {
                let range2 = NSRange(str.rangeofContents, in : str)
                attributedString.replaceCharacters(in: range2, with: contents)
                
+               
+               
             //save text(realm)
               
-               let task = memoModel(title: title.string ,date: Date(), contents: contents.string, status: 0)
+               let task = memoModel(title: title.string ,date: Date(), contents: contents.string, status: 0, donebuttonStatus: true)
                do {
                    try localRealm.write{
+                       if task.donebuttonStatus == false {
+                           task.donebuttonStatus = true
+                       }
                               localRealm.add(task)
                               print("realm succeed")
                        
@@ -107,46 +112,60 @@ class WriteViewController: BaseViewController, UINavigationControllerDelegate {
 
     @objc func backButtonTapped(){
 
+        
         if mainView.textview.text.isEmpty {
             self.navigationController?.popViewController(animated: true)
-           } else {
-               //save title
-               let str = mainView.textview.text ?? ""
-               let attributedString = NSMutableAttributedString(string: str)
-               let title = NSAttributedString(string: String(str.firstLine))
-               let range = NSRange(str.rangeOfFirstLine, in: str)
-               attributedString.replaceCharacters(in: range, with: title)
-               
-               //save contents
-               let contents = NSAttributedString(string: String(str.contentsLine))
-               let range2 = NSRange(str.rangeofContents, in : str)
-               attributedString.replaceCharacters(in: range2, with: contents)
-               
-            //save text(realm)
-              
-               let task = memoModel(title: title.string ,date: Date(), contents: contents.string, status: 0)
-               do {
-                   try localRealm.write{
-                              localRealm.add(task)
-                              print("realm succeed")
-                       
-                       }
-                   } catch {
-                       print(Error.self)
-                   }
+        } else {
+            if localRealm.objects(memoModel.self).filter("donebuttonStatus == true").isEmpty{
+                //false 일 떄,저장버튼안눌림, 이동하기, realm의 donebuttonStataus = false 그대로
+                
+                let str = mainView.textview.text ?? ""
+                let attributedString = NSMutableAttributedString(string: str)
+                let title = NSAttributedString(string: String(str.firstLine))
+                let range = NSRange(str.rangeOfFirstLine, in: str)
+                attributedString.replaceCharacters(in: range, with: title)
+                
+                //save contents
+                let contents = NSAttributedString(string: String(str.contentsLine))
+                let range2 = NSRange(str.rangeofContents, in : str)
+                attributedString.replaceCharacters(in: range2, with: contents)
+                
+                //save text(realm)
+                
+                let task = memoModel(title: title.string ,date: Date(), contents: contents.string, status: 0, donebuttonStatus: false)
+                do {
+                    try localRealm.write{
+                        localRealm.add(task)
+                        print("realm succeed")
+                        
+                    }
+                } catch {
+                    print(Error.self)
+                }
+                
+                
+            } else {
+                //true = 저장버튼 눌림(realm에 status 를 false로 업데이트)
+                //save title
+                
+               try! localRealm.write {
+                    localRealm.objects(memoModel.self).first?.donebuttonStatus = false
+                }
+                
+            }
+            //나타내기
             
-               //나타내기
-        
-               MainViewController().mainView.tableView.reloadData()
-      
+            MainViewController().mainView.tableView.reloadData()
+            
+            let vc = MainViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
         }
         
-        let vc = MainViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
         
-       }
+        
+    }
     
-   
+    
 }
 
 extension StringProtocol where Index == String.Index {
@@ -157,7 +176,7 @@ extension StringProtocol where Index == String.Index {
     var partialRangeOfContents : PartialRangeFrom<String.Index> {
         return (rangeOfCharacter(from: .newlines)?.upperBound ?? firstLine.endIndex)...
     }
-  
+    
     var rangeOfFirstLine: Range<Index> {
         return startIndex..<partialRangeOfFirstLine.upperBound
     }
