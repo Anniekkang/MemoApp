@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,17 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-//
-//            let alert = UIAlertController(title: nil, message: "처음 오셨군요! \n 환영합니다 :) \n\n 당신만의 메모를 작성하고 \n 관리해보세요!", preferredStyle: .alert)
-//
-//            let ok = UIAlertAction(title: "확인", style: .default)
-//            alert.addAction(ok)
-//            self.window?.rootViewController?.present(alert, animated: true, completion: nil)
-//
+       
         
-        
-//        makeAlert(message: "처음 오셨군요! \n 환영합니다 :) \n\n 당신만의 메모를 작성하고 \n 관리해보세요!")
-        // Override point for customization after application launch.
+     // Override point for customization after application launch.
         return true
     }
 

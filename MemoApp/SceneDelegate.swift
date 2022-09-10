@@ -13,10 +13,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+       
         guard let _ = (scene as? UIWindowScene) else { return }
+//        window = UIWindow(windowScene: scene)
+        
+//        UserDefaults.standard.set(true, forKey: "firstPopup")
+//        let firstPopup = UserDefaults.standard.bool(forKey: "firstPopup")
+//
+//        if !firstPopup {
+//            let alert = UIAlertController(title: nil, message: "처음 오셨군요! \n 환영합니다 :) \n\n 당신만의 메모를 작성하고 \n 관리해보세요!", preferredStyle: .alert)
+//
+//            let ok = UIAlertAction(title: "확인", style: .default)
+//            alert.addAction(ok)
+//            self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+//
+//
+//        } else {
+//            self.window?.rootViewController?.present(MainViewController(), animated: true)
+//        }
+//
+//        window?.makeKeyAndVisible()
+//
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -9,7 +9,7 @@ import UIKit
 import RealmSwift
 import CoreMIDI
 
-class WriteViewController: BaseViewController {
+class WriteViewController: BaseViewController, UINavigationControllerDelegate {
 
     let localRealm = try! Realm()
    
@@ -30,38 +30,32 @@ class WriteViewController: BaseViewController {
         
         mainView.backgroundColor = .darkGray
         naviDesign()
-
-        mainView.textview.becomeFirstResponder()
         
+        mainView.textview.becomeFirstResponder()
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         print("Realm is located at:", localRealm.configuration.fileURL!)
         
+        
     }
-    
+ 
     func naviDesign(){
         //navigationitem design
-         let leftButton = UIButton(type: .system)
-         leftButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-         leftButton.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
-         leftButton.setTitle("메모", for: .normal)
-         leftButton.sizeToFit()
-         leftButton.tintColor = .orange
-         leftButton.setTitleColor(.orange, for: .normal)
-         leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-         
-         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
-         
-
-         
-         let shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonTapped))
-    
-         let rightButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(doneButtonTapped))
-         
-         rightButton.tintColor = .orange
-         shareButton.tintColor = .orange
-         
-         navigationItem.rightBarButtonItems = [rightButton,shareButton]
+        let leftButton = UIButton(type: .system)
+        leftButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        leftButton.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        leftButton.sizeToFit()
+        leftButton.tintColor = .orange
+        leftButton.setTitleColor(.orange, for: .normal)
+        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        leftButton.setTitle("메모", for: .normal)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
+        let shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonTapped))
+        let rightButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(doneButtonTapped))
+        rightButton.tintColor = .orange
+        shareButton.tintColor = .orange
+        navigationItem.rightBarButtonItems = [rightButton,shareButton]
         
-        
+  
     }
     
     @objc func shareButtonTapped(){
@@ -106,26 +100,53 @@ class WriteViewController: BaseViewController {
                //나타내기
         
                MainViewController().mainView.tableView.reloadData()
-              
-              
-               
-               
-               
-               
+      
         }
-  
-       
+
     }
-    
-    
 
     @objc func backButtonTapped(){
 
+        if mainView.textview.text.isEmpty {
+            self.navigationController?.popViewController(animated: true)
+           } else {
+               //save title
+               let str = mainView.textview.text ?? ""
+               let attributedString = NSMutableAttributedString(string: str)
+               let title = NSAttributedString(string: String(str.firstLine))
+               let range = NSRange(str.rangeOfFirstLine, in: str)
+               attributedString.replaceCharacters(in: range, with: title)
+               
+               //save contents
+               let contents = NSAttributedString(string: String(str.contentsLine))
+               let range2 = NSRange(str.rangeofContents, in : str)
+               attributedString.replaceCharacters(in: range2, with: contents)
+               
+            //save text(realm)
+              
+               let task = memoModel(title: title.string ,date: Date(), contents: contents.string)
+               do {
+                   try localRealm.write{
+                              localRealm.add(task)
+                              print("realm succeed")
+                       
+                       }
+                   } catch {
+                       print(Error.self)
+                   }
+            
+               //나타내기
+        
+               MainViewController().mainView.tableView.reloadData()
+      
+        }
+        
         let vc = MainViewController()
         self.navigationController?.pushViewController(vc, animated: true)
         
        }
-
+    
+   
 }
 
 extension StringProtocol where Index == String.Index {
@@ -154,4 +175,9 @@ extension StringProtocol where Index == String.Index {
     
 }
 
+extension WriteViewController : UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+}
 
