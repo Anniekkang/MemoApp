@@ -12,32 +12,19 @@ import SwiftUI
 
 
 class MainViewController: BaseViewController, UISearchBarDelegate, UISearchControllerDelegate {
-
-
-        
+     
     let localRealm = try! Realm()
     
-   
-    
-
-   
-   
     var tasks : Results<memoModel>!
     var writeButton: UIBarButtonItem!
     let mainView = MainView()
     var fixedMemoCount = 0
     var filteredCell : [memoModel] = []
-    var sectionZeroArr : [memoModel] = []
-    var sectionOneArr : [memoModel] = []
-   
-    
-    
     
     override func loadView() {
         self.view = mainView
         print(#function)
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,12 +38,10 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
         toolbarDesign()
         setupSearchController()
         
-        
-        
-        makeAlert(message: "처음 오셨군요! \n 환영합니다 :) \n\n 당신만의 메모를 작성하고 \n 관리해보세요!")
-
-        
-
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        userDefault()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,12 +49,14 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
         fetchRealm()
         print(#function)
     }
-    
-    
-    
-    func dateFormatter(){
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+
+    func userDefault(){
+        if UserDefaults.standard.bool(forKey: "open") == false {
+            let vc = popUpViewController()
+            vc.modalTransitionStyle = .crossDissolve
+            vc.modalPresentationStyle = .overCurrentContext
+            self.present(vc, animated: true)
+        }
         
         
         
@@ -182,32 +169,27 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.reuseIdentifier, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
-        
     
-        
-        
-        
         cell.backgroundColor = .systemGray
-        
-        
         if self.isFiltering {
             
             cell.textLabel?.text = filteredCell[indexPath.row].title
             cell.contentsLabel.text = filteredCell[indexPath.row].contents
             cell.timeLabel.text = "\(filteredCell[indexPath.row].date)"
-            
-            
         } else {
            
             cell.textLabel?.text =  tasks[indexPath.row].title
             cell.contentsLabel.text = tasks[indexPath.row].contents
-            cell.timeLabel.text = "\(tasks[indexPath.row].date)"
+    
             
+            
+            cell.timeLabel.text = "\(tasks[indexPath.row].date)"
         }
      
         return cell
-        
     }
+    
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //active and hastext 일 때
@@ -223,6 +205,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         
         }
     }
+    
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
@@ -282,39 +265,40 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
  
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
          //realm에서 false를 true 로 바꿈.혹은 반대
+        
         let fixed = UIContextualAction(style: .normal, title: "fixed") { [self] action, view, completionHandler in
             
             try! self.localRealm.write{
-                
                 self.tasks[indexPath.row].fixed = !self.tasks[indexPath.row].fixed
                 self.fetchRealm()
                 //false가 true로 바뀜(in realm)
-                
-            }
-            
-            
-            switch self.tasks[indexPath.row].fixed {
-            case true:
-                
-                self.fixedMemoCount += 1
-                self.sectionZeroArr.append(self.tasks[indexPath.row] )
-                if self.sectionOneArr.contains(self.tasks[indexPath.row]) {
-                    self.sectionOneArr.remove(at: [indexPath][0].row)
-                }
-                     
-            case false:
-                
-                self.fixedMemoCount -= 1
-                
         
-                self.sectionOneArr.append(self.tasks[indexPath.row] )
-                if self.sectionZeroArr.contains(self.tasks[indexPath.row]) {
-                    self.sectionZeroArr.remove(at: [indexPath][0].row)
-                }
-                     
             }
+           
+            let zeroSection = tasks.filter("fixed = true")
+            let oneSection = tasks.filter("fixed = false")
+
             
-        
+
+
+//            if tasks[indexPath.row].fixed {
+//                //section = 0 에서 필요한 배열
+//
+//                sectionZeroArr.append(tasks[indexPath.row])
+//                if sectionOneArr.contains(tasks[indexPath.row]) {
+//                    sectionOneArr.remove(at: indexPath.row)
+//                }
+//            } else {
+//                //section = 1 에서 필요한 배열
+//                sectionOneArr.append(tasks[indexPath.row])
+//                if sectionZeroArr.contains(tasks[indexPath.row]) {
+//                    sectionZeroArr.remove(at: indexPath.row)
+//                }
+//
+//            }
+//
+//
+            fixedMemoCount = zeroSection.toArray().count
             if self.fixedMemoCount > 5 {
                 self.makeAlert(message: "더이상 추가할 수 없습니다")
      
@@ -322,41 +306,49 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
             tableView.reloadData()
             
         }
-        
-        
-        
+    
         let image = self.tasks[indexPath.row].fixed ? "pin.slash.fill" : "pin.fill"
         fixed.image = UIImage(systemName: image)
         fixed.backgroundColor = .orange
         fixed.image?.withTintColor(.white)
         
-        
         return UISwipeActionsConfiguration(actions: [fixed])
     }
-    
-    
-   
-    
-    
+ 
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
+        let cancel = UIContextualAction(style: .normal, title: "cancel") { action, view, completionHandler in
+            completionHandler(false)
+        }
+
         let delete = UIContextualAction(style: .destructive, title: "delete") { action, view, completionHandler in
-            
             //realm에 있는 메모 지우기
             try! self.localRealm.write({
                 self.localRealm.delete(self.tasks[indexPath.row])
-            
+                
             })
             
-            self.setupSearchController()
-            tableView.reloadData()
+            let alert = UIAlertController(title: nil, message:  "정말로 삭제하시겠습니까?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "네", style: .default, handler: { UIAlertAction in
+                completionHandler(false)
+            }))
+            alert.addAction(UIAlertAction(title: "아니요", style: .cancel, handler: { UIAlertAction in
+                completionHandler(true)
+            }))
+            
+            alert.popoverPresentationController?.sourceView = view
+            alert.popoverPresentationController?.sourceRect = view.bounds
+            self.present(alert, animated: true)
+            
+        }
+        
+        tableView.reloadData()
+        
+        
+        return UISwipeActionsConfiguration(actions: [cancel,delete])
+        
     }
-        
-        return UISwipeActionsConfiguration(actions: [delete] )
-        
-    }
-        
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }

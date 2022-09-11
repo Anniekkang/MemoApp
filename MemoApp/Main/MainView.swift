@@ -35,6 +35,7 @@ class MainView: BaseView {
         [tableView].forEach {
             self.addSubview($0)
         }
+       
     }
     
     override func setConstraints() {
