@@ -37,6 +37,7 @@ class MainViewController: BaseViewController, UISearchBarDelegate, UISearchContr
         configuration()
         toolbarDesign()
         setupSearchController()
+        mainView.tableView.keyboardDismissMode = .onDrag
         
     }
     
@@ -167,15 +168,18 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         
     }
     
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.reuseIdentifier, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
-    
+
+        
         cell.backgroundColor = .systemGray
         if self.isFiltering {
             
             cell.textLabel?.text = filteredCell[indexPath.row].title
             cell.contentsLabel.text = filteredCell[indexPath.row].contents
-            cell.timeLabel.text = "\(filteredCell[indexPath.row].date)"
+            cell.timeLabel.text = convertTime(date: filteredCell[indexPath.row].date, indexPath: indexPath)
         } else {
            
             cell.textLabel?.text =  tasks[indexPath.row].title
@@ -183,14 +187,13 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     
             
             
-            cell.timeLabel.text = "\(tasks[indexPath.row].date)"
+            cell.timeLabel.text = convertTime(date: tasks[indexPath.row].date, indexPath: indexPath)
         }
      
         return cell
     }
     
-    
-    
+  
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //active and hastext 일 때
         if self.isFiltering {
@@ -411,20 +414,22 @@ extension MainViewController : UISearchResultsUpdating {
     
     
 }
-//extension UIColor {
-//    static var navigationBarColor : UIColor {
-//        if #available(iOS 13, *) {
-//            return UIColor { (traitCollection : UITraitCollection) -> UIColor in
-//                if traitCollection.userInterfaceStyle == .dark {
-//                    return UIColor(red: 18.0/255.0, green: 18.0/255.0, blue: 18.0/255.0, alpha: 1.0)
-//                } else {
-//                    return UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 1.0)
-//                }
-//            }
-//
-//            }
-//        else {
-//            return UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 240.0/255.0)
-//        }
-//    }
-//}
+extension UIColor {
+    static var navigationBarColor : UIColor {
+        if #available(iOS 13, *) {
+            return UIColor { (traitCollection : UITraitCollection) -> UIColor in
+                if traitCollection.userInterfaceStyle == .dark {
+                    return UIColor(red: 18.0/255.0, green: 18.0/255.0, blue: 18.0/255.0, alpha: 1.0)
+                } else {
+                    return UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 1.0)
+                }
+            }
+
+            }
+        else {
+            return UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 240.0/255.0)
+        }
+    }
+}
+
+

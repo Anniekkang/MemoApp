@@ -29,6 +29,7 @@
 		9E3A6DBC28C4902C00ED02E9 /* WriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A6DBB28C4902C00ED02E9 /* WriteView.swift */; };
 		9E589BCA28C5CB8F00130CE6 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E589BC928C5CB8F00130CE6 /* Repository.swift */; };
 		9E8281BE28CE5BCD001EC0F8 /* popUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8281BD28CE5BCD001EC0F8 /* popUpViewController.swift */; };
+		9E8281C028CEA7FD001EC0F8 /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8281BF28CEA7FD001EC0F8 /* extension.swift */; };
 		9E956D2E28CC43A6000EDB1B /* ModifiedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E956D2D28CC43A6000EDB1B /* ModifiedViewController.swift */; };
 		9E956D3028CC43EA000EDB1B /* ModifiedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E956D2F28CC43EA000EDB1B /* ModifiedView.swift */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,7 @@
 		9E3A6DBB28C4902C00ED02E9 /* WriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteView.swift; sourceTree = "<group>"; };
 		9E589BC928C5CB8F00130CE6 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		9E8281BD28CE5BCD001EC0F8 /* popUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popUpViewController.swift; sourceTree = "<group>"; };
+		9E8281BF28CEA7FD001EC0F8 /* extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
 		9E956D2D28CC43A6000EDB1B /* ModifiedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifiedViewController.swift; sourceTree = "<group>"; };
 		9E956D2F28CC43EA000EDB1B /* ModifiedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifiedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +118,7 @@
 				9E19D6AC28C16BC600DD949C /* MainView.swift */,
 				9E19D6C328C2062200DD949C /* MainTableViewCell.swift */,
 				9E8281BD28CE5BCD001EC0F8 /* popUpViewController.swift */,
+				9E8281BF28CEA7FD001EC0F8 /* extension.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				9E956D2E28CC43A6000EDB1B /* ModifiedViewController.swift in Sources */,
 				9E3A6DB728C48EA600ED02E9 /* realmModel.swift in Sources */,
 				9E8281BE28CE5BCD001EC0F8 /* popUpViewController.swift in Sources */,
+				9E8281C028CEA7FD001EC0F8 /* extension.swift in Sources */,
 				9E19D69828C16B3F00DD949C /* SceneDelegate.swift in Sources */,
 				9E19D6B028C16BD100DD949C /* BaseView.swift in Sources */,
 				9E956D3028CC43EA000EDB1B /* ModifiedView.swift in Sources */,

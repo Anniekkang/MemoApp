@@ -33,5 +33,35 @@ class memoModel : Object {
 
 }
 
+//Date타입 현재 시각을 string 으로 바꿔서 반환해주는 함수 -> 지난주
+func lastweekDateFormatter(date : Date) -> String {
+    let myDateFormatter = DateFormatter()
+    myDateFormatter.dateFormat = "yyyy.mm.dd a hh시 mm분"
+    myDateFormatter.locale = Locale(identifier: "ko_KR")
+    let convertStr = myDateFormatter.string(from: Date())//현재시간 스트링형식 -> 일주일 후 부터 적용
 
+    
+    return convertStr
 
+}
+//Date타입 현재 시각을 요일string 으로 변환해서 반환해주는 함수 -> 이번주
+func thisweekDateForamatter(date : Date) -> String {
+    let myDateFormatter = DateFormatter()
+    myDateFormatter.dateFormat = "EEEE요일"
+    myDateFormatter.locale = Locale(identifier: "ko_KR")
+    let convertStr = myDateFormatter.string(from: Date())
+    
+    return convertStr
+  
+}
+
+//Date타입 현재 시각을 오늘기준 string으로 변환해서 반환해주는 함수 -> 오늘
+func todayDateFormatter(date: Date) -> String {
+    let myDateFormatter = DateFormatter()
+    myDateFormatter.dateFormat = "a hh시 mm분"
+    myDateFormatter.locale = Locale(identifier: "ko_KR")
+    let convertStr = myDateFormatter.string(from: date)
+    
+    return convertStr
+  
+}
