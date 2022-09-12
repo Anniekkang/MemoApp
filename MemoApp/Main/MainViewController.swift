@@ -176,10 +176,8 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         
         cell.backgroundColor = .systemGray
         if self.isFiltering {
-            
-            cell.textLabel?.text = filteredCell[indexPath.row].title
-            cell.contentsLabel.text = filteredCell[indexPath.row].contents
             cell.timeLabel.text = convertTime(date: filteredCell[indexPath.row].date, indexPath: indexPath)
+            
             
             let searchingModel = tasks[indexPath.row]
             let contenttext : String = searchingModel.contents
@@ -213,9 +211,6 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
            
             cell.textLabel?.text =  tasks[indexPath.row].title
             cell.contentsLabel.text = tasks[indexPath.row].contents
-    
-            
-            
             cell.timeLabel.text = convertTime(date: tasks[indexPath.row].date, indexPath: indexPath)
         }
      
