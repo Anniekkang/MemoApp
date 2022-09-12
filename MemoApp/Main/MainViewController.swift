@@ -302,29 +302,13 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         
             }
            
-            let zeroSection = tasks.filter("fixed = true")
-            let oneSection = tasks.filter("fixed = false")
-
+            var zeroSection = localRealm.objects(memoModel.self).filter("fixed == true")
             
+            if tasks[indexPath.section].fixed {
+                
+            }
 
 
-//            if tasks[indexPath.row].fixed {
-//                //section = 0 에서 필요한 배열
-//
-//                sectionZeroArr.append(tasks[indexPath.row])
-//                if sectionOneArr.contains(tasks[indexPath.row]) {
-//                    sectionOneArr.remove(at: indexPath.row)
-//                }
-//            } else {
-//                //section = 1 에서 필요한 배열
-//                sectionOneArr.append(tasks[indexPath.row])
-//                if sectionZeroArr.contains(tasks[indexPath.row]) {
-//                    sectionZeroArr.remove(at: indexPath.row)
-//                }
-//
-//            }
-//
-//
             fixedMemoCount = zeroSection.toArray().count
             if self.fixedMemoCount > 5 {
                 self.makeAlert(message: "더이상 추가할 수 없습니다")
