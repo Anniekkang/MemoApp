@@ -180,6 +180,35 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
             cell.textLabel?.text = filteredCell[indexPath.row].title
             cell.contentsLabel.text = filteredCell[indexPath.row].contents
             cell.timeLabel.text = convertTime(date: filteredCell[indexPath.row].date, indexPath: indexPath)
+            
+            let searchingModel = tasks[indexPath.row]
+            let contenttext : String = searchingModel.contents
+            let titletext : String = searchingModel.title
+            
+            let attributeContent = NSMutableAttributedString(string: contenttext)
+            let attributeTitle = NSMutableAttributedString(string: titletext)
+            
+            var contentsFirstindex : Int = 0
+            var titleFirstIndex : Int = 0
+            
+            if let textFirstRange = contenttext.range(of: filteredCell[indexPath.row].contents, options: .caseInsensitive){
+                contentsFirstindex = contenttext.distance(from: contenttext.startIndex, to: textFirstRange.lowerBound)
+                
+                attributeContent.addAttribute(.foregroundColor, value: UIColor.orange, range: NSRange(location: contentsFirstindex, length: contenttext.count))
+                cell.contentsLabel.attributedText = attributeContent
+                cell.selectionStyle = .none
+            }
+            
+            if let titleFirstRange = titletext.range(of: filteredCell[indexPath.row].title, options: .caseInsensitive){
+                titleFirstIndex = titletext.distance(from: titletext.startIndex, to: titleFirstRange.lowerBound)
+                
+                attributeTitle.addAttribute(.foregroundColor, value: UIColor.orange, range: NSRange(location: titleFirstIndex, length: titletext.count))
+                
+                cell.titleLabel.attributedText = attributeTitle
+                cell.selectionStyle = .none
+            }
+            
+         
         } else {
            
             cell.textLabel?.text =  tasks[indexPath.row].title
